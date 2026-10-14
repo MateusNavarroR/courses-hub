@@ -1,41 +1,45 @@
 # Courses Hub
 
-Dashboard de cursos com experiência inspirada na Udemy. Repositório inicialmente privado; implantação planejada no oracle-vps.
+Biblioteca pessoal de cursos com catálogo inspirado na Udemy. V1 local, com backend Python sem dependências externas e frontend HTML/CSS/JavaScript.
 
-## Estado
+## Executar
 
-Pesquisa inicial e escopo proposto. Aplicação ainda não implementada ou implantada. Dois cursos serão cadastrados quando seu formato e localização forem definidos.
+Requer Python 3.11 ou superior.
 
-## Escopo inicial proposto
+```bash
+python3 server.py
+```
 
-- Catálogo com capas, busca e filtros.
-- Cadastro de cursos, módulos e aulas.
-- Página do curso e player com lista lateral de aulas.
-- Progresso de estudo e continuar de onde parou.
-- Login e interface responsiva em português.
-- Vídeos e materiais fora do Git.
+Abra http://localhost:8765. Outra porta: `python3 server.py --port 8766`.
 
-## Projetos pesquisados
+## Recursos
 
-| Projeto | Recursos e adequação |
-| --- | --- |
-| [LearnHouse](https://github.com/learnhouse/learnhouse) | Interface moderna, editor, cursos e dashboard; Next.js e FastAPI, com PostgreSQL e Redis. Candidato para adaptar uma plataforma pronta. Núcleo AGPL-3.0; pagamentos e SSO são Enterprise. |
-| [Frappe Learning](https://github.com/frappe/lms) | Cursos, capítulos, aulas, exercícios e certificados; usa Frappe e Vue. Indicado para gestão de ensino mais completa. AGPL-3.0. |
-| [CourseLit](https://github.com/codelitdev/courselit) | Criação e venda de cursos, gestão de alunos e integração Stripe; mais orientado a negócios de cursos. [Documentação de hospedagem](https://docs.courselit.app/self-hosting/introduction/). |
+- Catálogo com busca e filtros por progresso.
+- Player com módulos e aulas ordenados numericamente, reprodução com HTTP Range e retomada da posição.
+- Marcação de conclusão e persistência em SQLite.
+- Materiais Python e TXT com leitura na interface e download; PDFs e notebooks disponíveis como arquivos.
+- Adicionar curso por caminho de pasta local, sem duplicação dos arquivos.
+- Selecionar e enviar pasta pelo navegador, com envio em blocos e progresso.
+- Layout responsivo em português.
 
-Pesquisa realizada em 14/10/2026 a partir dos repositórios e da documentação oficial. Avaliação documental; as plataformas ainda não foram executadas ou comparadas visualmente no servidor.
+O banco, o progresso e os arquivos enviados ficam em `.data/`, ignorado pelo Git. Cursos adicionados por caminho dependem da permanência dos arquivos na pasta original. O caminho corresponde ao computador que executa o servidor.
 
-## Infraestrutura observada
+## Limites da v1
 
-Acesso SSH ao oracle-vps confirmado. Servidor x86_64, Docker disponível, aproximadamente 956 MiB de RAM total e 7,2 GiB de disco livre no momento da inspeção. Precisamos avaliar consumo e armazenamento antes de escolher a plataforma; compatibilidade de implantação ainda não foi validada.
+Servidor apenas em loopback, sem autenticação: para uso local. Antes de implantar em VPS, implementar autenticação, limites de armazenamento, controles de upload e servidor adequado a produção. Uploads interrompidos podem deixar arquivos parciais em `.data/uploads/`; retomar uploads entre sessões, remoção e edição de cursos ainda não estão implementados. Não há importação ZIP/RAR, transcodificação, capas personalizadas ou execução de código. Compatibilidade de vídeo depende dos codecs do navegador. Não modifique o banco com o servidor em uso.
 
-## Direção sugerida
+## Verificação
 
-Para uma biblioteca pessoal de dois cursos, considerar uma aplicação enxuta com catálogo, player e progresso. Se a intenção for oferecer cursos a alunos, avaliar primeiro LearnHouse ou Frappe Learning. A escolha depende do formato dos cursos e do público. Nenhuma base foi incorporada ao repositório.
+```bash
+python3 -m unittest discover -s tests -v
+```
 
-## Pontos a definir
+Testes de importação por upload, ordenação, materiais, persistência de progresso, reprodução parcial e rejeição de caminhos indevidos.
 
-- Uso pessoal ou acesso de outros alunos?
-- Cursos em pastas com MP4/PDF, links externos ou conteúdo a produzir?
-- Localização e tamanho total dos arquivos.
-- Domínio e estratégia de armazenamento.
+## Referências
+
+- [LearnHouse](https://github.com/learnhouse/learnhouse): catálogo, estrutura de capítulos e atividades; [migração de conteúdo](https://docs.learnhouse.app/developers/migration).
+- [Frappe Learning](https://github.com/frappe/lms): organização de cursos e progresso.
+- [CourseLit](https://github.com/codelitdev/courselit): administração de cursos.
+
+Implementação própria; nenhum código desses projetos foi incorporado. Repositório inicialmente privado. Implantação futura planejada no oracle-vps, após definir armazenamento para os vídeos.
