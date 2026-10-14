@@ -1,12 +1,12 @@
 """Courses Hub local: Python 3.11+, sem dependências externas."""
-import base64, hashlib, json, mimetypes, re, sqlite3, threading
+import base64, hashlib, json, mimetypes, os, re, sqlite3, threading
 from contextlib import contextmanager
 from pathlib import Path
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / '.data'
+DATA = Path(os.environ.get('COURSES_HUB_DATA', str(ROOT / '.data')))
 DATA.mkdir(exist_ok=True)
 LOCK = threading.Lock()
 VIDEO = {'.mp4', '.webm', '.m4v', '.mov'}
@@ -156,6 +156,6 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__=='__main__':
     import argparse
-    parser=argparse.ArgumentParser(); parser.add_argument('--port',type=int,default=8765); args=parser.parse_args()
+    parser=argparse.ArgumentParser(); parser.add_argument('--port',type=int,default=8765); parser.add_argument('--host',default='127.0.0.1'); args=parser.parse_args()
     print(f'Courses Hub: http://localhost:{args.port}',flush=True)
-    ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
+    ThreadingHTTPServer((args.host,args.port),Handler).serve_forever()
