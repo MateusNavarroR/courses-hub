@@ -100,6 +100,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(206 if value else 200)
         self.send_header('Content-Type',mimetypes.guess_type(target.name)[0] or 'application/octet-stream')
         self.send_header('Accept-Ranges','bytes')
+        if path.startswith('/files/') and parse_qs(urlparse(self.path).query).get('download') == ['1']:
+            self.send_header('Content-Disposition', "attachment; filename*=UTF-8''" + quote(target.name))
         self.send_header('Content-Length',str(end-start+1))
         self.send_header('X-Content-Type-Options','nosniff')
         if value: self.send_header('Content-Range',f'bytes {start}-{end}/{size}')
