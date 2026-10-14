@@ -42,6 +42,7 @@ Abra http://localhost:8765. Outra porta: `python3 server.py --port 8766`.
 
 - Catálogo com busca e filtros por progresso.
 - Player com módulos e aulas ordenados numericamente, reprodução com HTTP Range e retomada da posição.
+- Velocidade de reprodução: 0,25x, 0,50x, 0,75x, 1x, 1,25x, 1,50x, 1,75x e 2x, com preferência salva neste navegador.
 - Marcação de conclusão e persistência em SQLite.
 - Materiais Python e TXT com leitura na interface e download; PDFs e notebooks disponíveis como arquivos.
 - Adicionar curso por caminho de pasta local, sem duplicação dos arquivos.
